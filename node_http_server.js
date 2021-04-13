@@ -95,7 +95,7 @@ class NodeHttpServer {
           const url = `rtmp://a.rtmp.youtube.com/live2/${req.query.youtube}`;
           const session = this.nodeRelaySession({
             ffmpeg: ffmpeg_path,
-            inPath: `rtmp//127.0.0.1:${port}${StreamPath}`,
+            inPath: `rtmp://127.0.0.1:${port}${StreamPath}`,
             ouPath: url
           })
           session.id = `youtube-${id}`;
@@ -107,7 +107,7 @@ class NodeHttpServer {
           const url = `rtmps://live-api-s.facebook.com:443/rtmp/${req.query.facebook}`;
           const session = this.nodeRelaySession({
             ffmpeg: ffmpeg_path,
-            inPath: `rtmp//127.0.0.1:${port}${StreamPath}`,
+            inPath: `rtmp://127.0.0.1:${port}${StreamPath}`,
             ouPath: url
           })
           session.id = `facebook-${id}`;
@@ -119,7 +119,7 @@ class NodeHttpServer {
           const url = `rtmp://live.twitch.tv/app/${req.query.twitch}`;
           const session = this.nodeRelaySession({
             ffmpeg: ffmpeg_path,
-            inPath: `rtmp//127.0.0.1:${port}${StreamPath}`,
+            inPath: `rtmp://127.0.0.1:${port}${StreamPath}`,
             ouPath: url
           })
           session.id = `twitch-${id}`;
