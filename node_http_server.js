@@ -14,6 +14,7 @@ const Express = require('express');
 const bodyParser = require('body-parser');
 const basicAuth = require('basic-auth-connect');
 const NodeFlvSession = require('./node_flv_session');
+const NodeRelaySession = require('./node_relay_session');
 const HTTP_PORT = 80;
 const HTTPS_PORT = 443;
 const HTTP_MEDIAROOT = './media';
@@ -86,6 +87,54 @@ class NodeHttpServer {
     }
   }
 
+  postSocials (port, StreamPath, id, ffmpeg_path){
+    this.httpServer.on('request', (req, res)=>{
+      if (req.method === 'POST'){
+        let dynamicStreams = new Map();
+        if (req.query.youtube){
+          const url = `rtmp://a.rtmp.youtube.com/live2/${req.query.youtube}`;
+          const session = this.nodeRelaySession({
+            ffmpeg: ffmpeg_path,
+            inPath: `rtmp//127.0.0.1:${port}${StreamPath}`,
+            ouPath: url
+          })
+          session.id = `youtube-${id}`;
+          session.on('end', (id) => this.dynamicSessions.delete(id));
+          dynamicStreams.set(session.id, session);
+          session.run();
+        }
+        if (req.query.facebook){
+          const url = `rtmps://live-api-s.facebook.com:443/rtmp/${req.query.facebook}`;
+          const session = this.nodeRelaySession({
+            ffmpeg: ffmpeg_path,
+            inPath: `rtmp//127.0.0.1:${port}${StreamPath}`,
+            ouPath: url
+          })
+          session.id = `facebook-${id}`;
+          session.on('end', (id) => this.dynamicSessions.delete(id));
+          dynamicStreams.set(session.id, session);
+          session.run();
+        }
+        if (req.query.twitch){
+          const url = `rtmp://live.twitch.tv/app/${req.query.twitch}`;
+          const session = this.nodeRelaySession({
+            ffmpeg: ffmpeg_path,
+            inPath: `rtmp//127.0.0.1:${port}${StreamPath}`,
+            ouPath: url
+          })
+          session.id = `twitch-${id}`;
+          session.on('end', (id) => this.dynamicSessions.delete(id));
+          dynamicStreams.set(session.id, session);
+          session.run();
+        }
+        return dynamicStreams;
+      }
+    })
+  }
+
+  nodeRelaySession(config) {
+    return new NodeRelaySession(config);
+  }
   run() {
     this.httpServer.listen(this.port, () => {
       Logger.log(`Node Media Http Server started on port: ${this.port}`);
