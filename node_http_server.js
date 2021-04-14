@@ -86,7 +86,13 @@ class NodeHttpServer {
       this.httpsServer = Https.createServer(options, app);
     }
   }
-
+  testing(){
+    this.httpServer.on('request', (req,res)=>{
+      console.log("REQUEST FROM HTTP!!!!!")
+      console.log(req.method);
+      console.log(req.query);
+    });
+  }
   postSocials (port, StreamPath, id, ffmpeg_path){
     this.httpServer.on('request', (req, res)=>{
       if (req.method === 'POST'){
