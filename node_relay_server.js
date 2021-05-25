@@ -30,11 +30,11 @@ class NodeRelayServer {
 
     let version = await getFFmpegVersion(this.config.relay.ffmpeg);
     Logger.log(version);
-    if (version === '' || parseInt(version.split('.')[0]) < 4) {
-      Logger.error('Node Media Relay Server startup failed. ffmpeg requires version 4.0.0 above');
-      Logger.error('Download the latest ffmpeg static program:', getFFmpegUrl());
-      return;
-    }
+//     if (version === '' || parseInt(version.split('.')[0]) < 4) {
+//       Logger.error('Node Media Relay Server startup failed. ffmpeg requires version 4.0.0 above');
+//       Logger.error('Download the latest ffmpeg static program:', getFFmpegUrl());
+//       return;
+//     }
     context.nodeEvent.on('relayPull', this.onRelayPull.bind(this));
     context.nodeEvent.on('relayPush', this.onRelayPush.bind(this));
     context.nodeEvent.on('prePlay', this.onPrePlay.bind(this));
