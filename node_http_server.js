@@ -42,6 +42,7 @@ class NodeHttpServer {
       res.header("Access-Control-Allow-Credentials", true);
       req.method === "OPTIONS" ? res.sendStatus(200) : next();
       Logger.log(`req.method: ${req.method}, req.url: ${req.path}`);
+      req.method === "POST" ? res.sendStatus(200) : next();
     });
 
     app.get('*.flv', (req, res, next) => {
