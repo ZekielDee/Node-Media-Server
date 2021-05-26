@@ -43,6 +43,7 @@ class NodeHttpServer {
       req.method === "OPTIONS" ? res.sendStatus(200) : next();
       Logger.log(`req.method: ${req.method}, req.url: ${req.path}`);
       req.method === "POST" ? res.sendStatus(200) : next();
+      Logger.log(`req.body: ${req.body}`);
     });
 
     app.get('*.flv', (req, res, next) => {
