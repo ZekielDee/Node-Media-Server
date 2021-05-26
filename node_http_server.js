@@ -25,6 +25,7 @@ const streamsRoute = require('./api/routes/streams');
 const serverRoute = require('./api/routes/server');
 const relayRoute = require('./api/routes/relay');
 
+
 class NodeHttpServer {
   constructor(config) {
     this.port = config.http.port || HTTP_PORT;
@@ -34,6 +35,7 @@ class NodeHttpServer {
     let app = Express();
 
     app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(Express.json());
 
     app.all('*', (req, res, next) => {
       res.header("Access-Control-Allow-Origin", this.config.http.allow_origin);
@@ -41,10 +43,12 @@ class NodeHttpServer {
       res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
       res.header("Access-Control-Allow-Credentials", true);
       req.method === "OPTIONS" ? res.sendStatus(200) : next();
-      Logger.log(`req.method: ${req.method}, req.url: ${req.path}, req.body: ${req.body}`);
-      req.method === "POST" ? res.sendStatus(200) : next();
-      
     });
+    app.post('*', (req, res, next) => {
+      Logger.log(`req.method: ${req.method}, req.url: ${req.path}, req.body: ${req.body}`);
+      context.nodeEvent.emit("postrequest", req.path, req.body);
+      res.sendStatus(200);
+    })
 
     app.get('*.flv', (req, res, next) => {
       req.nmsConnectionType = 'http';
