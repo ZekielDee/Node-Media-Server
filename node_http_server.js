@@ -41,8 +41,7 @@ class NodeHttpServer {
       res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
       res.header("Access-Control-Allow-Credentials", true);
       req.method === "OPTIONS" ? res.sendStatus(200) : next();
-      Logger.log(`req.method: ${req.method}, req.url: ${req.path}`);
-      Logger.log(`req.body: ${req.body}`);
+      Logger.log(`req.method: ${req.method}, req.url: ${req.path}, req.body: ${req.body}`);
       req.method === "POST" ? res.sendStatus(200) : next();
       
     });
